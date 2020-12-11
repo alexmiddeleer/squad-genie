@@ -1,19 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Squad Genie</h1>
+    <HelloWorld v-if="step === 0" @onStart="step++" />
+    <footer>
+      <sub
+        >(c) 2020 - Alex Middeleer - alexander.middeleer@wolterskluwer.com</sub
+      >
+    </footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     HelloWorld
+  },
+  data() {
+    return {
+      step: 0
+    };
   }
-}
+};
 </script>
 
 <style>
@@ -24,5 +34,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
 }
 </style>
