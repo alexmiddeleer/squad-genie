@@ -9,10 +9,31 @@ import { cloneDeep } from "lodash";
 // idea: split team that needs N devs into N different teams and then join them at the end
 export default function match(devs, teams) {
   const unmatched = cloneDeep(devs);
-  teams = cloneDeep(teams);
+  teams = normalizeTeams(cloneDeep(teams));
+  let iterations = 0;
+  while (unmatched.length) {
+    iterations++;
+    if (iterations > 1000000) {
+      alert(
+        "failed to find stable match after 1000000 iterations, check input"
+      );
+      break;
+    }
 
-  teams = normalizeTeams(teams);
-  teams.forEach(team => (team.dev = 1));
+    const dev = unmatched.pop();
+    for (let pref of dev.prefs) {
+      const team = teams.find(t => {
+        return t.id.split(delimiter).shift() === pref;
+      });
+      if (offerJoin(dev, team)) {
+        if (team.dev) {
+          const dropped = team.dev;
+          unmatched.push(dropped);
+        }
+        team.dev = dev;
+      }
+    }
+  }
   return denormalizeTeams(teams);
 
   // while(unmatched.length) {
@@ -22,8 +43,6 @@ export default function match(devs, teams) {
   //     if
   //   })
   // }
-
-  return cloneDeep([{}]);
 }
 
 const delimiter = "%%%";
@@ -64,4 +83,22 @@ export function denormalizeTeams(teams) {
     }
     return acc;
   }, []);
+}
+
+export function offerJoin(dev, team) {
+  if (!team.dev) {
+    return true;
+  }
+  if (!team.prefs || !team.prefs.length) {
+    return false;
+  }
+  const prefOrderDev = team.prefs.indexOf(dev.id);
+  if (prefOrderDev < 0) {
+    return false;
+  }
+  const prefOrderTeamDev = team.prefs.indexOf(team.dev);
+  if (prefOrderTeamDev < 0) {
+    return true;
+  }
+  return prefOrderDev < prefOrderTeamDev;
 }
