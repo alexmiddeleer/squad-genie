@@ -36,6 +36,21 @@ describe("match", function() {
     ];
     expect(match(devs, teams)).toEqual(expected);
   });
+  it("should place two devs on two teams (swap variant)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2"] },
+      { id: "2", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["2", "1"] },
+      { id: "2", qtyNeeded: 1, prefs: ["1", "2"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[1]] },
+      { ...teams[1], devs: [devs[0]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
   it("should place three devs on one team", function() {
     const devs = [
       { id: "1", prefs: ["1", "2", "3"] },
@@ -61,22 +76,143 @@ describe("match", function() {
     ];
     expect(match(devs, teams)).toEqual(expected);
   });
-  // it("should work", function() {
-  //   const devs = [
-  //     { id: "1", prefs: ["1", "2"] },
-  //     { id: "2", prefs: ["2", "1"] },
-  //     { id: "3", prefs: ["2", "1"] }
-  //   ];
-  //   const teams = [
-  //     { id: "1", qtyNeeded: 1, prefs: ["1", "2", "3"] },
-  //     { id: "2", qtyNeeded: 2, prefs: ["2", "1", "3"] }
-  //   ];
-  //   const expected = [
-  //     { id: "1", devs: [1], qtyNeeded: 1, prefs: ["1", "2", "3"] },
-  //     { id: "2", devs: [2, 3], qtyNeeded: 2, prefs: ["2", "1", "3"] }
-  //   ];
-  //   expect(match(devs, teams)).toEqual(expected);
-  // });
+  it("should place 3 devs on two teams", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2"] },
+      { id: "2", prefs: ["1", "2"] },
+      { id: "3", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["1", "2", "3"] },
+      { id: "2", qtyNeeded: 2, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[0]] },
+      { ...teams[1], devs: [devs[1], devs[2]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("should place 3 devs on two teams (swap variant)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2"] },
+      { id: "2", prefs: ["1", "2"] },
+      { id: "3", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["3", "2", "1"] },
+      { id: "2", qtyNeeded: 2, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[2]] },
+      { ...teams[1], devs: [devs[0], devs[1]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("should place 3 devs on two teams (swap variant 2)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2"] },
+      { id: "2", prefs: ["1", "2"] },
+      { id: "3", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 2, prefs: ["3", "2", "1"] },
+      { id: "2", qtyNeeded: 1, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[2], devs[1]] },
+      { ...teams[1], devs: [devs[0]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("should place 3 devs on two teams (prefs variant)", function() {
+    const devs = [
+      { id: "1", prefs: ["2", "1"] },
+      { id: "2", prefs: ["1", "2"] },
+      { id: "3", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["1", "2", "3"] },
+      { id: "2", qtyNeeded: 2, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[1]] },
+      { ...teams[1], devs: [devs[0], devs[2]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("three teams", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2", "3"] },
+      { id: "2", prefs: ["1", "2", "3"] },
+      { id: "3", prefs: ["1", "2", "3"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["1", "2", "3"] },
+      { id: "2", qtyNeeded: 1, prefs: ["1", "2", "3"] },
+      { id: "3", qtyNeeded: 1, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[0]] },
+      { ...teams[1], devs: [devs[1]] },
+      { ...teams[2], devs: [devs[2]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("three teams (swap variant)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2", "3"] },
+      { id: "2", prefs: ["1", "2", "3"] },
+      { id: "3", prefs: ["1", "2", "3"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["3", "2", "1"] },
+      { id: "2", qtyNeeded: 1, prefs: ["1", "2", "3"] },
+      { id: "3", qtyNeeded: 1, prefs: ["1", "2", "3"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[2]] },
+      { ...teams[1], devs: [devs[0]] },
+      { ...teams[2], devs: [devs[1]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("three teams (swap variant 2)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2", "3"] },
+      { id: "2", prefs: ["1", "2", "3"] },
+      { id: "3", prefs: ["1", "2", "3"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["3", "2", "1"] },
+      { id: "2", qtyNeeded: 1, prefs: ["3", "2", "1"] },
+      { id: "3", qtyNeeded: 1, prefs: ["3", "2", "1"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[2]] },
+      { ...teams[1], devs: [devs[1]] },
+      { ...teams[2], devs: [devs[0]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
+  it("three teams 4 devs", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2", "3"] },
+      { id: "2", prefs: ["1", "2", "3"] },
+      { id: "3", prefs: ["1", "2", "3"] },
+      { id: "4", prefs: ["1", "2", "3"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["3", "2", "1", "4"] },
+      { id: "2", qtyNeeded: 2, prefs: ["3", "2", "1", "4"] },
+      { id: "3", qtyNeeded: 1, prefs: ["3", "2", "1", "4"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[2]] },
+      { ...teams[1], devs: [devs[1], devs[0]] },
+      { ...teams[2], devs: [devs[3]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
 });
 
 describe("normalizeTeams", function() {
