@@ -96,9 +96,15 @@ export function offerJoin(dev, team) {
   if (prefOrderDev < 0) {
     return false;
   }
-  const prefOrderTeamDev = team.prefs.indexOf(team.dev);
+  const prefOrderTeamDev = team.prefs.indexOf(team.dev.id);
   if (prefOrderTeamDev < 0) {
     return true;
   }
   return prefOrderDev < prefOrderTeamDev;
+}
+
+export function checkPref(teams, dev, pref) {
+  return teams.find(t => {
+    return t.id.split(delimiter).shift() === pref && offerJoin(dev, t);
+  });
 }

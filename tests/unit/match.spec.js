@@ -1,4 +1,9 @@
-import match, { normalizeTeams, denormalizeTeams, offerJoin } from "@/match.js";
+import match, {
+  normalizeTeams,
+  denormalizeTeams,
+  offerJoin,
+  checkPref
+} from "@/match.js";
 
 describe("match", function() {
   it("should place one dev", function() {
@@ -102,21 +107,60 @@ describe("offerJoin", function() {
     expect(offerJoin(null, { dev: null })).toBeTruthy();
   });
   it("should return false if team has no prefs and has a dev", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2 })).toBeFalsy();
+    expect(offerJoin({ id: 1 }, { dev: { id: 2 } })).toBeFalsy();
   });
   it("should return false if dev not found in team prefs", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2, prefs: [] })).toBeFalsy();
+    expect(offerJoin({ id: 1 }, { dev: { id: 2 }, prefs: [] })).toBeFalsy();
   });
   it("should return false if dev not found in team prefs (variant 2)", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2, prefs: [2] })).toBeFalsy();
+    expect(offerJoin({ id: 1 }, { dev: { id: 2 }, prefs: [2] })).toBeFalsy();
   });
   it("should return true if dev in prefs and team dev is not", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2, prefs: [1] })).toBeTruthy();
+    expect(offerJoin({ id: 1 }, { dev: { id: 2 }, prefs: [1] })).toBeTruthy();
   });
   it("should return false if dev less preferable", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2, prefs: [2, 1] })).toBeFalsy();
+    expect(offerJoin({ id: 1 }, { dev: { id: 2 }, prefs: [2, 1] })).toBeFalsy();
   });
   it("should return true if dev is more preferable", function() {
-    expect(offerJoin({ id: 1 }, { dev: 2, prefs: [1, 2] })).toBeTruthy();
+    expect(
+      offerJoin({ id: 1 }, { dev: { id: 2 }, prefs: [1, 2] })
+    ).toBeTruthy();
+  });
+});
+
+describe("checkPref", function() {
+  it("should not find team if no teams", function() {
+    expect(checkPref([], { id: "1" }, "1")).toBeFalsy();
+  });
+  it("should find team", function() {
+    expect(checkPref([{ id: "1" }], { id: "1" }, "1")).toBeTruthy();
+  });
+  it("should find team in normalized team", function() {
+    const teams = [
+      { id: "1%%%1", qtyNeeded: 2 },
+      { id: "1%%%2", qtyNeeded: 2 }
+    ];
+    expect(checkPref(teams, { id: "1" }, "1")).toBeTruthy();
+  });
+  it("should find team in normalized team (variant 2)", function() {
+    const teams = [
+      { id: "1%%%1", qtyNeeded: 2, dev: 2 },
+      { id: "1%%%2", qtyNeeded: 2 }
+    ];
+    expect(checkPref(teams, { id: "1" }, "1")).toEqual({
+      id: "1%%%2",
+      qtyNeeded: 2
+    });
+  });
+  it("should find team in normalized team (variant 3)", function() {
+    const teams = [
+      { id: "1%%%1", qtyNeeded: 2, dev: { id: "1" }, prefs: ["1", "2"] },
+      { id: "1%%%2", qtyNeeded: 2, prefs: ["1", "2"] }
+    ];
+    expect(checkPref(teams, { id: "2" }, "1")).toEqual({
+      id: "1%%%2",
+      qtyNeeded: 2,
+      prefs: ["1", "2"]
+    });
   });
 });
