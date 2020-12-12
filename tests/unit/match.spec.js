@@ -12,14 +12,15 @@ describe("match", function() {
     const expected = [{ ...teams[0], devs: [devs[0]] }];
     expect(match(devs, teams)).toEqual(expected);
   });
-  // it("should place two devs", function() {
-  //   const devs = [{ id: "1", prefs: ["1"] },{ id: "2", prefs: ["1"] }];
-  //   const teams = [{ id: "1", qtyNeeded: 1, prefs: [1, 2, 3] }];
-  //   const expected = [
-  //     { id: "1", devs: [devs[0]], qtyNeeded: 1, prefs: [1, 2, 3] }
-  //   ];
-  //   expect(match(devs, teams)).toEqual(expected);
-  // });
+  it("should place two devs on one team", function() {
+    const devs = [
+      { id: "1", prefs: ["1"] },
+      { id: "2", prefs: ["1"] }
+    ];
+    const teams = [{ id: "1", qtyNeeded: 2, prefs: ["1", "2"] }];
+    const expected = [{ ...teams[0], devs: [devs[0], devs[1]] }];
+    expect(match(devs, teams)).toEqual(expected);
+  });
   // it("should work", function() {
   //   const devs = [
   //     { id: "1", prefs: [1, 2] },
@@ -154,6 +155,31 @@ describe("checkPref", function() {
   });
   it("should find team in normalized team (variant 3)", function() {
     const teams = [
+      { id: "1%%%1", qtyNeeded: 2, dev: { id: "1" }, prefs: ["1", "2"] },
+      { id: "1%%%2", qtyNeeded: 2, prefs: ["1", "2"] }
+    ];
+    expect(checkPref(teams, { id: "2" }, "1")).toEqual({
+      id: "1%%%2",
+      qtyNeeded: 2,
+      prefs: ["1", "2"]
+    });
+  });
+  it("should find team in multiple teams", function() {
+    const teams = [
+      { id: "2", qtyNeeded: 1 },
+      { id: "1%%%1", qtyNeeded: 2, dev: { id: "1" }, prefs: ["1", "2"] },
+      { id: "1%%%2", qtyNeeded: 2, prefs: ["1", "2"] }
+    ];
+    expect(checkPref(teams, { id: "2" }, "1")).toEqual({
+      id: "1%%%2",
+      qtyNeeded: 2,
+      prefs: ["1", "2"]
+    });
+  });
+  it("should find team in multiple teams", function() {
+    const teams = [
+      { id: "2%%%1", qtyNeeded: 1 },
+      { id: "2%%%2", qtyNeeded: 1 },
       { id: "1%%%1", qtyNeeded: 2, dev: { id: "1" }, prefs: ["1", "2"] },
       { id: "1%%%2", qtyNeeded: 2, prefs: ["1", "2"] }
     ];

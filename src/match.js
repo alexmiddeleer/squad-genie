@@ -8,8 +8,8 @@ import { cloneDeep } from "lodash";
 // [{id: 1, devIds:[1]}, {id: 2, devIds:[2,3]}]
 // idea: split team that needs N devs into N different teams and then join them at the end
 export default function match(devs, teams) {
-  const unmatched = cloneDeep(devs);
   teams = normalizeTeams(cloneDeep(teams));
+  const unmatched = cloneDeep(devs);
   let iterations = 0;
   while (unmatched.length) {
     iterations++;
@@ -22,27 +22,18 @@ export default function match(devs, teams) {
 
     const dev = unmatched.pop();
     for (let pref of dev.prefs) {
-      const team = teams.find(t => {
-        return t.id.split(delimiter).shift() === pref;
-      });
-      if (offerJoin(dev, team)) {
-        if (team.dev) {
-          const dropped = team.dev;
+      const newTeam = checkPref(teams, dev, pref);
+      if (newTeam) {
+        if (newTeam.dev) {
+          const dropped = newTeam.dev;
           unmatched.push(dropped);
         }
-        team.dev = dev;
+        newTeam.dev = dev;
+        break;
       }
     }
   }
   return denormalizeTeams(teams);
-
-  // while(unmatched.length) {
-  //   const dev = unmatched.pop();
-  //   dev.prefs.forEach(teamId => {
-  //     const team = teams.find(t => t.id === teamId);
-  //     if
-  //   })
-  // }
 }
 
 const delimiter = "%%%";
