@@ -46,6 +46,21 @@ describe("match", function() {
     const expected = [{ ...teams[0], devs: [devs[0], devs[1], devs[2]] }];
     expect(match(devs, teams)).toEqual(expected);
   });
+  it("should place two devs on two teams (swap variant)", function() {
+    const devs = [
+      { id: "1", prefs: ["1", "2"] },
+      { id: "2", prefs: ["1", "2"] }
+    ];
+    const teams = [
+      { id: "1", qtyNeeded: 1, prefs: ["2", "1"] },
+      { id: "2", qtyNeeded: 1, prefs: ["2", "1"] }
+    ];
+    const expected = [
+      { ...teams[0], devs: [devs[1]] },
+      { ...teams[1], devs: [devs[0]] }
+    ];
+    expect(match(devs, teams)).toEqual(expected);
+  });
   // it("should work", function() {
   //   const devs = [
   //     { id: "1", prefs: ["1", "2"] },
