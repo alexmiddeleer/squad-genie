@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <h1>Squad Genie</h1>
-    <HelloWorld v-if="step === 0" @onStart="step++" />
+    <WelcomeMessage v-if="step === 0" @onStart="step++" />
     <ProjectSetup v-if="step === 1" @onNext="teamNext" />
-    <AddDevelopers v-if="step === 2" @onNext="developersNext" />
+    <AddTeam v-if="step === 2" @onNext="addTeamNext" />
+    <AddDevelopers v-if="step === 3" @onNext="developersNext" />
     <table v-if="debug">
       <tr>
         <td>Number of teams</td>
@@ -32,16 +33,18 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import WelcomeMessage from "./components/HelloWorld.vue";
 import ProjectSetup from "./components/ProjectSetup.vue";
 import AddDevelopers from "./components/AddDevelopers.vue";
+import AddTeam from "./components/AddTeams.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    WelcomeMessage,
     ProjectSetup,
-    AddDevelopers
+    AddDevelopers,
+    AddTeam
   },
   data() {
     return {
