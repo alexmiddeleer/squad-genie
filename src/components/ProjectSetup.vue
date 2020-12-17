@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div>
     <h2>How many teams?</h2>
     <div>
       <label>Number of teams: <input type="number" v-model="numTeams"/></label>

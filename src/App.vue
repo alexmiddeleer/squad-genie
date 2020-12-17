@@ -3,12 +3,17 @@
     <h1>Squad Genie</h1>
     <WelcomeMessage v-if="step === 0" @onStart="step++" />
     <ProjectSetup v-if="step === 1" @onNext="teamNext" />
-    <AddTeam v-if="step === 2" @onNext="addTeamNext" />
-    <AddDevelopers v-if="step === 3" @onNext="developersNext" />
+    <TeamNames v-if="step === 2" :numTeams="numTeams" @onNext="teamNamesNext" />
+    <AddTeam v-if="step === 3" @onNext="addTeamNext" />
+    <AddDevelopers v-if="step === 4" @onNext="developersNext" />
     <table v-if="debug">
       <tr>
         <td>Number of teams</td>
         <td>{{ numTeams }}</td>
+      </tr>
+      <tr>
+        <td>Teams</td>
+        <td>{{ teams.map(t => t.name).join(", ") }}</td>
       </tr>
       <tr>
         <td>Roles</td>
@@ -35,6 +40,7 @@
 <script>
 import WelcomeMessage from "./components/HelloWorld.vue";
 import ProjectSetup from "./components/ProjectSetup.vue";
+import TeamNames from "./components/TeamNames.vue";
 import AddDevelopers from "./components/AddDevelopers.vue";
 import AddTeam from "./components/AddTeams.vue";
 
@@ -44,6 +50,7 @@ export default {
     WelcomeMessage,
     ProjectSetup,
     AddDevelopers,
+    TeamNames,
     AddTeam
   },
   data() {
@@ -51,7 +58,8 @@ export default {
       debug: true,
       step: 0,
       numTeams: -1,
-      devs: []
+      devs: [],
+      teams: []
     };
   },
   computed: {
@@ -74,6 +82,10 @@ export default {
     teamNext(numTeams) {
       this.step++;
       this.numTeams = numTeams;
+    },
+    teamNamesNext(teams) {
+      this.step++;
+      this.teams = teams;
     },
     developersNext(devs) {
       this.step++;
