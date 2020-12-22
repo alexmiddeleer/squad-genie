@@ -1,33 +1,14 @@
 <template>
-  <div class="hello">
+  <div>
     <h2>Who will make up the teams?</h2>
     <div class="form">
-      <label>Name: <input v-model="newDevName"/></label>
-      <label
-        >Lead Candidate? <input type="checkbox" v-model="newDevIsLead"
-      /></label>
-      <label
-        >Type:
-        <select v-model="newDevType">
-          <option value="back-end">Back-end</option>
-          <option value="front-end">Front-end</option>
-          <option value="full-stack">Full Stack</option>
-          <option value="qa">QA</option>
-          <option value="auto">Automation Engineer</option>
-          <option value="mgr">Manager</option>
-          <option value="ux">UX</option>
-          <option value="dba">DBA</option>
-          <option value="devops">Devops</option>
-          <option value="arch">Architect</option>
-          <option value="pm">Project Manager</option>
-        </select>
-      </label>
+      <DeveloperForm v-model="newDev" />
       <sub
         >Don't add developers for roles that are not needed, already decided, or
         irrelevant.</sub
       >
     </div>
-    <button :disabled="!(newDevName && newDevType)" @click="add">Add</button>
+    <button :disabled="!(newDev.name && newDev.type)" @click="add">Add</button>
     <div v-for="(dev, idx) in devs" :key="dev.id">
       <label>Name: <input v-model="dev.name"/></label>
       <label
@@ -60,26 +41,33 @@
 </template>
 
 <script>
+import DeveloperForm from "./DeveloperForm.vue";
+
 export default {
+  components: { DeveloperForm },
   data() {
     return {
-      newDevName: "",
-      newDevIsLead: false,
-      newDevType: "",
+      newDev: {
+        name: "",
+        isLead: false,
+        type: ""
+      },
       devs: []
     };
   },
   methods: {
     add() {
       this.devs.push({
-        id: this.newDevName + Math.random(),
-        name: this.newDevName,
-        type: this.newDevType,
-        isLead: this.newDevIsLead
+        id: this.newDev.name + Math.random(),
+        name: this.newDev.name,
+        type: this.newDev.type,
+        isLead: this.newDev.isLead
       });
-      this.newDevName = "";
-      this.newDevType = "";
-      this.newDevIsLead = false;
+      this.newDev = {
+        name: "",
+        isLead: false,
+        type: ""
+      };
     },
     removeDev(idx) {
       this.devs.splice(idx, 1);

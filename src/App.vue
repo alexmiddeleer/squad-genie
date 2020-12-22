@@ -4,8 +4,8 @@
     <WelcomeMessage v-if="step === 0" @onStart="step++" />
     <ProjectSetup v-if="step === 1" @onNext="teamNext" />
     <TeamNames v-if="step === 2" :numTeams="numTeams" @onNext="teamNamesNext" />
-    <AddTeam v-if="step === 3" @onNext="addTeamNext" />
-    <AddDevelopers v-if="step === 4" @onNext="developersNext" />
+    <AddDevelopers v-if="step === 3" @onNext="developersNext" />
+    <AddTeam v-if="step === 4" @onNext="addTeamNext" />
     <table v-if="debug">
       <tr>
         <td>Number of teams</td>
