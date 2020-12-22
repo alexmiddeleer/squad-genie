@@ -10,26 +10,7 @@
     </div>
     <button :disabled="!(newDev.name && newDev.type)" @click="add">Add</button>
     <div v-for="(dev, idx) in devs" :key="dev.id">
-      <label>Name: <input v-model="dev.name"/></label>
-      <label
-        >Lead Candidate? <input type="checkbox" v-model="dev.isLead"
-      /></label>
-      <label
-        >Type:
-        <select v-model="dev.type">
-          <option value="back-end">Back-end</option>
-          <option value="front-end">Front-end</option>
-          <option value="full-stack">Full Stack</option>
-          <option value="qa">QA</option>
-          <option value="auto">Automation Engineer</option>
-          <option value="mgr">Manager</option>
-          <option value="ux">UX</option>
-          <option value="dba">DBA</option>
-          <option value="devops">Devops</option>
-          <option value="arch">Architect</option>
-          <option value="pm">Project Manager</option>
-        </select>
-      </label>
+      <DeveloperForm :dev="dev" @input="updateDev(idx, $event)" />
       <button @click="removeDev(idx)">Remove</button>
     </div>
     <div class="wizard-bottom-bar">
@@ -71,6 +52,9 @@ export default {
     },
     removeDev(idx) {
       this.devs.splice(idx, 1);
+    },
+    updateDev(idx, evt) {
+      this.devs[idx] = Object.assign({}, this.devs[idx], evt);
     }
   }
 };
