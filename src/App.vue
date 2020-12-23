@@ -94,7 +94,17 @@ export default {
   }
 };
 </script>
+<style scoped>
+footer {
+  position: fixed;
+  bottom: 0;
+}
 
+table {
+  position: fixed;
+  bottom: 30px;
+}
+</style>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -142,9 +152,5 @@ td {
 }
 td:first-child {
   border-left: 1px solid #cecfd5;
-}
-footer {
-  position: absolute;
-  bottom: 0;
 }
 </style>

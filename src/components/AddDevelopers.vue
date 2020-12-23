@@ -2,16 +2,30 @@
   <div>
     <h2>Who will make up the teams?</h2>
     <div class="form">
-      <DeveloperForm v-model="newDev" />
-      <sub
-        >Don't add developers for roles that are not needed, already decided, or
-        irrelevant.</sub
-      >
+      <DeveloperForm class="dev-form add-dev" v-model="newDev">
+        <div class="dev-form-button">
+          <button :disabled="!(newDev.name && newDev.type)" @click="add">
+            Add
+          </button>
+        </div>
+        <sub
+          >Only include developers that need to be matched (don't add developers
+          whose team is decided already)</sub
+        >
+      </DeveloperForm>
     </div>
-    <button :disabled="!(newDev.name && newDev.type)" @click="add">Add</button>
-    <div v-for="(dev, idx) in devs" :key="dev.id">
-      <DeveloperForm :dev="dev" @input="updateDev(idx, $event)" />
-      <button @click="removeDev(idx)">Remove</button>
+    <div class="dev-grid">
+      <div class="developer-li" v-for="(dev, idx) in devs" :key="dev.id">
+        <DeveloperForm
+          class="dev-form"
+          :dev="dev"
+          @input="updateDev(idx, $event)"
+        >
+          <div class="dev-form-button">
+            <button @click="removeDev(idx)">Remove</button>
+          </div>
+        </DeveloperForm>
+      </div>
     </div>
     <div class="wizard-bottom-bar">
       <button :disabled="devs.length < 1" @click="$emit('onNext', devs)">
@@ -59,22 +73,25 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.add-dev {
+  margin: 20px 0 10px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.dev-form {
+  text-align: left;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.dev-grid {
+  margin: auto;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  grid-gap: 10px;
 }
-a {
-  color: #42b983;
+.developer-li .dev-form {
+  display: block;
+  background-color: #efefef;
 }
-.form {
-  display: flex;
-  flex-direction: column;
+.dev-form-button {
+  margin-top: 20px;
 }
 </style>
