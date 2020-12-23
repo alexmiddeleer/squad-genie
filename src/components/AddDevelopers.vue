@@ -24,15 +24,17 @@
 <script>
 import DeveloperForm from "./DeveloperForm.vue";
 
+const blankDev = {
+  name: "",
+  isLead: false,
+  type: ""
+};
+
 export default {
   components: { DeveloperForm },
   data() {
     return {
-      newDev: {
-        name: "",
-        isLead: false,
-        type: ""
-      },
+      newDev: { ...blankDev },
       devs: []
     };
   },
@@ -44,17 +46,13 @@ export default {
         type: this.newDev.type,
         isLead: this.newDev.isLead
       });
-      this.newDev = {
-        name: "",
-        isLead: false,
-        type: ""
-      };
+      this.newDev = { ...blankDev };
     },
     removeDev(idx) {
       this.devs.splice(idx, 1);
     },
-    updateDev(idx, evt) {
-      this.devs[idx] = Object.assign({}, this.devs[idx], evt);
+    updateDev(idx, dev) {
+      this.devs[idx] = Object.assign({}, this.devs[idx], dev);
     }
   }
 };
