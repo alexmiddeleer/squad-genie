@@ -2,7 +2,7 @@
   <div>
     <h2>Who will make up the teams?</h2>
     <div class="form">
-      <DeveloperForm class="dev-form add-dev" v-model="newDev">
+      <DeveloperForm class="dev-form add-dev" :teams="teams" v-model="newDev">
         <div class="dev-form-button">
           <button :disabled="!(newDev.name && newDev.type)" @click="add">
             Add
@@ -19,6 +19,7 @@
         <DeveloperForm
           class="dev-form"
           :dev="dev"
+          :teams="teams"
           @input="updateDev(idx, $event)"
         >
           <div class="dev-form-button">
@@ -46,6 +47,9 @@ const blankDev = {
 
 export default {
   components: { DeveloperForm },
+  props: {
+    teams: Array
+  },
   data() {
     return {
       newDev: { ...blankDev },

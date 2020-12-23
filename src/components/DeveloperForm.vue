@@ -29,19 +29,23 @@
         </select>
       </label>
     </div>
+    <NameRanker :objs="teams" />
     <slot />
   </div>
 </template>
 
 <script>
+import NameRanker from "./NameRanker.vue";
 export default {
   model: {
     prop: "dev",
     event: "input"
   },
   props: {
-    dev: Object
-  }
+    dev: Object,
+    teams: Array
+  },
+  components: { NameRanker }
 };
 </script>
 
