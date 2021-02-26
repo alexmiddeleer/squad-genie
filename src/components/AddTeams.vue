@@ -11,7 +11,7 @@
       -->
         teams collectively need at least two. Otherwise the algorithm<!--
       -->
-        will refuse to run because there is no possible solution.
+        will refuse to run because there is no valid solution.
       </p>
       <p>Do not add roles that are already decided or not needed.</p>
       <div class="roles-tally">

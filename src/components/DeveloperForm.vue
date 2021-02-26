@@ -28,7 +28,7 @@
           <option value="sm">Scrum Master</option>
         </select>
       </label>
-      <label v-for="team in dev.teams" :key="team.id">Ranking (lower is better) - {{team.name}}
+      <label v-for="team in dev.teams" :key="team.id">Ranking for team "{{team.name}}" (lower is better)
         <input
           type="number"
           v-model="team.devRank"
