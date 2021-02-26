@@ -28,6 +28,11 @@
           <option value="sm">Scrum Master</option>
         </select>
       </label>
+      <label v-for="team in dev.teams" :key="team.id">Ranking (lower is better) - {{team.name}}
+        <input
+          type="number"
+          v-model="team.devRank"
+      /></label>
     </div>
     <slot />
   </div>
@@ -40,8 +45,8 @@ export default {
     event: "input"
   },
   props: {
-    dev: Object
-  }
+    dev: Object,
+  },
 };
 </script>
 
@@ -67,7 +72,7 @@ a {
 }
 .inner-form {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
 }
 

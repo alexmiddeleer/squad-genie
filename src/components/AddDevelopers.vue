@@ -41,7 +41,8 @@ import DeveloperForm from "./DeveloperForm.vue";
 const blankDev = {
   name: "",
   isLead: false,
-  type: ""
+  type: "",
+  teams: [],
 };
 
 export default {
@@ -49,8 +50,14 @@ export default {
   data() {
     return {
       newDev: { ...blankDev },
-      devs: []
+      devs: [],
     };
+  },
+  props: {
+    teams: Array,
+  },
+  created() {
+    this.resetNewDev();
   },
   methods: {
     add() {
@@ -58,17 +65,28 @@ export default {
         id: this.newDev.name + Math.random(),
         name: this.newDev.name,
         type: this.newDev.type,
-        isLead: this.newDev.isLead
+        isLead: this.newDev.isLead,
+        teams: this.newDev.teams,
       });
-      this.newDev = { ...blankDev };
+      this.resetNewDev();
     },
     removeDev(idx) {
       this.devs.splice(idx, 1);
     },
     updateDev(idx, dev) {
       this.devs[idx] = Object.assign({}, this.devs[idx], dev);
-    }
-  }
+    },
+    resetNewDev() {
+      this.newDev = {
+        ...blankDev,
+        ...{
+          teams: this.teams.map((t) => {
+            return { ...t, ...{ devRanking: -1 } };
+          }),
+        },
+      };
+    },
+  },
 };
 </script>
 
